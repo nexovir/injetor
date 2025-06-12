@@ -1,0 +1,1 @@
+https://example.com/path1/path2/?query_param1=value1&auery_param2=value2

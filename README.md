@@ -1,99 +1,90 @@
 # Injector
 
-**Injector** is a smart parameter injection tool designed to inject specified parameters into URLs by appending or replacing query parameters. It supports batch processing, multiple injection modes, and flexible configuration options.
+**Injector** is a smart parameter injection tool designed to generate and manipulate query strings in URLs for testing or automation purposes.
 
 ---
 
 ## Features
 
-- Inject parameters into URLs using a wordlist or single parameter  
-- Supports modes to append or replace parameter values  
-- Multiple generation modes: root, ignore, combine, all  
-- Batch processing with chunk size control  
-- Silent mode to suppress terminal output  
-- Save results to output file  
+- Supports different modes of query parameter generation.
+- Appends or replaces parameter values intelligently.
+- Handles large wordlists with chunked processing.
+- Supports root path-only injection.
 
 ---
 
 ## Installation
 
 ```bash
-git clone <your-repo-url>
-cd injector
-pip install -r requirements.txt
+git clone https://github.com/nexovir/Injector.git
+cd Injector
+python3 injector.py -h
 ```
 
 ---
 
-## Usage
+## Usage Example
+
+### Basic Usage
 
 ```bash
-python injector.py -l urls.txt -w params.txt -p nexovir -vm append -gm all -c 25 -o output.txt
+python3 injector.py -l urls.txt -w wordlist.txt -p nexovir -gm all
+```
+
+### Example Input
+
+**URL:**
+
+```
+https://example.com/path1/path2/?query_param1=value1&query_param2=value2
+```
+
+**Mode: `-gm all`**
+
+Will generate:
+
+```
+https://example.com/path1/path2/?query_param1=value1nexovir&query_param2=value2
+https://example.com/path1/path2/?query_param1=value1&query_param2=value2nexovir
+https://example.com/path1/path2/?param1=nexovir&param2=nexovir
+https://example.com/path1/path2/?query_param1=value1&query_param2=value2&param1=nexovir&param2=nexovir
 ```
 
 ---
 
-## Examples
+## Modes
 
-### Example for `-gm all` and `-vm append`
+- `--generatemode all`: Combines all techniques (`combine`, `root`, `ignore`).
+- `--generatemode combine`: Only injects into existing parameters.
+- `--generatemode root`: Appends new parameters to root path.
+- `--generatemode ignore`: Ignores existing queries and appends new ones.
 
-Suppose you have the following:
-
-- URL: `https://example.com`
-- Wordlist parameters: `param1, param2, param3`
-- Parameter value to inject: `nexovir`
-
-Running:
-
-```bash
-python injector.py -l urls.txt -w wordlist.txt -p nexovir -vm append -gm all
-```
-
-Where:
-
-- `urls.txt` contains:  
-  ```
-  https://example.com
-  ```
-- `wordlist.txt` contains:  
-  ```
-  param1
-  param2
-  param3
-  ```
+- `--valuemode append`: Adds payload to end of existing value.
+- `--valuemode replace`: Replaces the original value.
 
 ---
 
-**What happens?**
+## Example Wordlist
 
-- The tool will generate URLs by appending each parameter with the value `nexovir`.
-- Since `-gm all` includes all modes (`combine`, `root`, `ignore`), the tool will:
-  - Append parameters to the root URL (without existing queries).
-  - Append parameters even if the URL has queries (not in this case).
-  - Append parameters ignoring existing query parameters.
+```
+param1
+param2
+```
+
+With `-p nexovir` and chunk = 2, generates:
+
+```
+?param1=nexovir&param2=nexovir
+```
 
 ---
 
-**Generated URLs:**
+## Output
 
-1. **Root mode:**  
-```
-https://example.com?param1=nexovir&param2=nexovir&param3=nexovir
-```
-
-2. **Ignore mode:**  
-```
-https://example.com?param1=nexovir&param2=nexovir&param3=nexovir
-```
-
-3. **Combine mode:** (no existing queries here, so no output)
+Use `-o output.txt` to save results.
 
 ---
 
-## Notes
+## Silent Mode
 
-- Use the `-s` or `--silent` flag to suppress output to the terminal.  
-- Use the `-o` or `--output` option to save generated URLs to a file.  
-- Adjust chunk size (`-c`) to control batch processing size.
-
----
+Use `-s` to suppress terminal output.
