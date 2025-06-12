@@ -1,10 +1,23 @@
 #!/usr/bin/env python3
 
-import colorama, time, subprocess, requests , argparse, os
+import argparse
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 import pyfiglet
+import pyfiglet
+from colorama import Fore, Style
 
-banner = pyfiglet.figlet_format("Injector")
+def show_banner():
+    banner = pyfiglet.figlet_format("Injector")
+    twitter = Style.BRIGHT + Fore.CYAN + "X.com: @nexovir" + Style.RESET_ALL
+    version = Fore.LIGHTBLACK_EX + "v1.0.0" + Style.RESET_ALL
+
+    # طول ترمینال رو به صورت ثابت در نظر می‌گیریم، مثلاً 80
+    total_width = 30
+    twitter_centered = twitter.center(total_width)
+    version_right = version.rjust(total_width)
+
+    print(banner + twitter_centered  + version_right + "\n")
+
 parser = argparse.ArgumentParser(description='Injector - Smart parameter injection tool')
 
 # --- Input Group ---
@@ -153,7 +166,7 @@ def injector (urls : list , generate_mode : str , value_mode : str , parameter :
 
 def main():
     try:
-        print(banner) if not silent else None
+        show_banner() if not silent else None
         all_parameters = []
         urls = read_write_list("", urls_path, 'r')
         wordlist_parameters = read_write_list("", wordlist, 'r') if wordlist else []
