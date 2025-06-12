@@ -62,16 +62,3 @@ Run silently without printing to terminal:
 ```bash
 python injector.py -l urls.txt -p nexovir -s
 ```
-
----
-
-## License
-
-Specify your license here (e.g., MIT, GPLv3)
-
----
-
-## Contact
-
-NEXOVIR – nexoovir@gmail.com  
-[https://github.com/nexovir]
