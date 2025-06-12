@@ -1,0 +1,22 @@
+An error occurred: unsupported operand type(s) for +: 'NoneType' and 'NoneType' -> 12/06/2025, 18:24:52
+An error occurred: injector() takes 4 positional arguments but 5 were given -> 12/06/2025, 18:48:09
+An error occurred: can only concatenate str (not "set") to str -> 12/06/2025, 18:56:58
+An error occurred: can only concatenate str (not "set") to str -> 12/06/2025, 18:57:12
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 18:58:37
+An error occurred: name 'append_prameter' is not defined -> 12/06/2025, 19:01:24
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:01:48
+An error occurred: injector.<locals>.root_mode() missing 1 required positional argument: 'chunk' -> 12/06/2025, 19:02:40
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:03:13
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:04:54
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:05:01
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:05:08
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:05:37
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:06:35
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:06:48
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:07:01
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:07:33
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:07:43
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:08:38
+An error occurred: 'set' object is not subscriptable -> 12/06/2025, 19:08:51
+An error occurred: 'str' object cannot be interpreted as an integer -> 12/06/2025, 19:12:30
+An error occurred: injector.<locals>.root_mode() missing 1 required positional argument: 'chunk' -> 12/06/2025, 19:30:19

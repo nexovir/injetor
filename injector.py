@@ -1,13 +1,15 @@
 import colorama, time, subprocess, requests , argparse, os
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
+import pyfiglet
 
-
+banner = pyfiglet.figlet_format("Injector")
 parser = argparse.ArgumentParser(description='Injector - Smart parameter injection tool')
 
 # --- Input Group ---
 input_group = parser.add_argument_group('Input Options')
 input_group.add_argument('-l', '--urlspath', help='Path to file containing list of target URLs for Injection.', required=True)
 input_group.add_argument('-w', '--wordlist',    help='Path to a file containing parameters to fuzz for reflection',required=False)
+input_group.add_argument('-p', '--parameter', help='Comma-separated parameter to test for reflection (default: "nexovir")', default='nexovir', required=False)
 
 # --- Modes ---
 notif_group = parser.add_argument_group('Mode')
@@ -16,7 +18,7 @@ notif_group.add_argument('-gm', '--generatemode',help='Control how parameters ar
 
 # --- Configurations ---
 notif_group = parser.add_argument_group('Configurations')
-input_group.add_argument('-c', '--chunk', help='Number of URLs to process per batch (default: 25)', default=25, required=False)
+input_group.add_argument('-c', '--chunk', help='Number of URLs to process per batch (default: 25)',type=int,  default=25, required=False)
 
 # --- Notification & Logging Group ---
 notif_group = parser.add_argument_group('Notification & Logging')
@@ -31,6 +33,7 @@ args = parser.parse_args()
 
 #Input & Group
 urls_path = args.urlspath
+wordlist = args.wordlist
 parameter = args.parameter
 
 #Mode
@@ -43,28 +46,7 @@ chunk = args.chunk
 #Notification
 silent = args.silent
 
-
-
-def sendmessage(message: str, telegram: bool = False, colour: str = "YELLOW", logger: bool = True , silent : bool = False):
-    color = getattr(colorama.Fore, colour, colorama.Fore.YELLOW)
-    if not silent:
-        print(color + message + colorama.Style.RESET_ALL)
-    time_string = time.strftime("%d/%m/%Y, %H:%M:%S", time.localtime())
-    if logger:
-        with open('logger.txt', 'a') as file:
-            file.write(message + ' -> ' + time_string + '\n')
-
-    if telegram:
-        token_bot = {YOUR_TOKEN_BOT} 
-        chat_id = "5028701156"
-        url = f"https://api.telegram.org/bot{token_bot}/sendMessage"
-        payload = {'chat_id': chat_id, 'text': message}
-        try:
-            response = requests.post(url, data=payload)
-            response.raise_for_status()
-        except requests.exceptions.RequestException as e:
-            print(f"Telegram message failed: {e}")
-
+print(banner) if not silent else None
 
 
 def read_write_list(list_data: list, file: str, type: str):
@@ -73,8 +55,9 @@ def read_write_list(list_data: list, file: str, type: str):
     
     if type == "read" or type == 'r':
         with open(file, 'r') as f:
-            objects = set(f.read().splitlines())
+            objects = list(set(line.strip() for line in f.read().splitlines() if line.strip()))
         return objects
+
     
     elif type == "write" or type == 'w': 
         with open(file, 'w') as f:
@@ -96,9 +79,9 @@ def read_write_list(list_data: list, file: str, type: str):
 
 
 
-def injector (urls : list , generate_mode : str , value_mode : str , parameter : str) -> list:
-
-    def append_mode(url, parameter , value_mode):
+def injector (urls : list , generate_mode : str , value_mode : str , parameter : str , wordlist_parameters : list , chunk : int) -> list:
+    all_urls = []
+    def value_mode_generate(url, parameter , value_mode):
         urls_generated = []
         parsed = urlparse(url)
         query_pairs = parse_qsl(parsed.query, keep_blank_values=True)
@@ -107,42 +90,76 @@ def injector (urls : list , generate_mode : str , value_mode : str , parameter :
             key, value = modified_pairs[i]
             modified_pairs[i] = (key, value + parameter) if value_mode == 'append' else (key, parameter)
             new_query = urlencode(modified_pairs)
-            new_url = urlunparse(parsed._replace(query=new_query))
+            new_url = urlunparse(parsed._replace(query=new_query)) 
             urls_generated.append(new_url)
 
         return urls_generated
 
+    def append_parameter(urls, parameter, wordlist_parameters, chunk):
+        urls_generated = []
+        for url in urls:
+            for i in range(0, len(wordlist_parameters), chunk):
 
-    def normal_mode (urls , value_mode , parameter):
-        pass
+                chunk_params = wordlist_parameters[i:i + chunk]
+
+                query_string = '&'.join([f"{p}={parameter}" for p in chunk_params])
+
+                if '?' in url:
+                    full_url = f"{url}&{query_string}"
+                else:
+                    full_url = f"{url}?{query_string}"
+
+                urls_generated.append(full_url)
+                
+        return urls_generated
+
+
+    def root_mode(urls , parameter, wordlist_parameters, chunk):
+        valid_urls = []
+        for url in urls:
+            base_url = url.split('?')[0]
+            if base_url not in valid_urls:
+                valid_urls.append(base_url)
+
+        urls_generated = append_parameter(valid_urls, parameter, wordlist_parameters, chunk)
+        all_urls.extend(urls_generated)
+
     def ignore_mode (urls , value_mode , parameter):
-        pass
+        urls_generated = append_parameter(urls, parameter, wordlist_parameters, chunk)
+        all_urls.extend(urls_generated)
 
     def combine_mode (urls , value_mode , parameter):
         for url in urls :
             if '?' in url:
-                urls_generated = append_mode(url , parameter , value_mode)
-                
+                urls_generated = value_mode_generate(url , parameter , value_mode)
+                all_urls.extend(urls_generated)
+
 
     if generate_mode == 'combine':
         combine_mode(urls , value_mode , parameter)
-    elif generate_mode == 'normal':
-        pass
+
+    elif generate_mode == 'root':
+        root_mode(urls , parameter , wordlist_parameters , chunk)
+
     elif generate_mode == 'ignore':
-        pass
+        ignore_mode(urls , value_mode , parameter)
+
+    else:
+        combine_mode(urls , value_mode , parameter)
+        root_mode(urls , parameter , wordlist_parameters , chunk)
+        ignore_mode(urls , value_mode , parameter)
+    return all_urls
 
 
 try:
     all_parameters = []
     urls = read_write_list("", urls_path, 'r')
-    injector(urls , generate_mode , value_mode , parameter)
-    # light_reflector(urls)
-
+    wordlist_parameters = read_write_list("", wordlist, 'r') if wordlist else []
+    all_urls = injector(urls , generate_mode , value_mode , parameter , wordlist_parameters , chunk)    
+    for url in all_urls :
+        print(url)
+        
 except Exception as e:
-    sendmessage(
+    print(
         f"An error occurred: {str(e)}",
-        telegram=notification,
-        colour="RED",
-        logger=logger,
-        silent=silent
     )
