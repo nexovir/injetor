@@ -6,7 +6,7 @@
 
 **Injector** is a smart and flexible parameter injection tool designed to automate and test query string manipulation in URLs. It supports multiple generation modes and is ideal for reconnaissance or debugging during web application testing.
 
-## 🛠 Installation
+## Installation
 
 Clone the repository and install it using `pip`:
 
@@ -22,7 +22,7 @@ Once installed, use `injector` directly from the terminal:
 injector -l urls.txt -w params.txt -gm all
 ```
 
-## 🔥 Example
+## Example
 
 Given a URL like:
 
@@ -46,7 +46,7 @@ These represent:
 - `ignore` mode: adds parameters without considering existing query string.
 - `all`: includes all of the above combined.
 
-## 💡 Usage
+## Usage
 
 ```bash
 injector -l <urls.txt> [-w <params.txt>] [-p <parameter>] [-vm append|replace] [-gm root|ignore|combine|all] [-c 25] [-s] [-o <output.txt>]
