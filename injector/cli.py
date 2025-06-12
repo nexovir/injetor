@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import colorama, time, subprocess, requests , argparse, os
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 import pyfiglet
@@ -151,15 +153,20 @@ def injector (urls : list , generate_mode : str , value_mode : str , parameter :
     return all_urls
 
 
-try:
-    all_parameters = []
-    urls = read_write_list("", urls_path, 'r')
-    wordlist_parameters = read_write_list("", wordlist, 'r') if wordlist else []
-    all_urls = injector(urls , generate_mode , value_mode , parameter , wordlist_parameters , chunk)    
-    for url in all_urls :
-        print(url)
-        
-except Exception as e:
-    print(
-        f"An error occurred: {str(e)}",
-    )
+def main():
+    try:
+        all_parameters = []
+        urls = read_write_list("", urls_path, 'r')
+        wordlist_parameters = read_write_list("", wordlist, 'r') if wordlist else []
+        all_urls = injector(urls , generate_mode , value_mode , parameter , wordlist_parameters , chunk)    
+        for url in all_urls :
+            print(url)
+            
+    except Exception as e:
+        print(
+            f"An error occurred: {str(e)}",
+        )
+
+
+if __name__ == "__main__":
+    main()

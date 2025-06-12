@@ -1,47 +1,33 @@
+
 # Injector
 
-**Injector** is a smart parameter injection tool designed to generate and manipulate query strings in URLs for testing or automation purposes.
+**Injector** is a smart and flexible parameter injection tool designed to automate and test query string manipulation in URLs. It supports multiple generation modes and is ideal for reconnaissance or debugging during web application testing.
 
----
+## 🛠 Installation
 
-## Features
-
-- Supports different modes of query parameter generation.
-- Appends or replaces parameter values intelligently.
-- Handles large wordlists with chunked processing.
-- Supports root path-only injection.
-
----
-
-## Installation
+Clone the repository and install it using `pip`:
 
 ```bash
 git clone https://github.com/nexovir/Injector.git
 cd Injector
-python3 injector.py -h
+pip install .
 ```
 
----
-
-## Usage Example
-
-### Basic Usage
+Once installed, use `injector` directly from the terminal:
 
 ```bash
-python3 injector.py -l urls.txt -w wordlist.txt -p nexovir -gm all
+injector -l urls.txt -w params.txt -gm all
 ```
 
-### Example Input
+## 🔥 Example
 
-**URL:**
+Given a URL like:
 
 ```
 https://example.com/path1/path2/?query_param1=value1&query_param2=value2
 ```
 
-**Mode: `-gm all`**
-
-Will generate:
+Running with `-gm all -vm append -p nexovir -w wordlist.txt` may generate:
 
 ```
 https://example.com/path1/path2/?query_param1=value1nexovir&query_param2=value2
@@ -50,34 +36,19 @@ https://example.com/path1/path2/?param1=nexovir&param2=nexovir
 https://example.com/path1/path2/?query_param1=value1&query_param2=value2&param1=nexovir&param2=nexovir
 ```
 
----
+These represent:
 
-## Modes
+- `combine` mode with `append`: injects into existing query param values.
+- `root` mode: creates new parameters on base URL.
+- `ignore` mode: adds parameters without considering existing query string.
+- `all`: includes all of the above combined.
 
-- `--generatemode all`: Combines all techniques (`combine`, `root`, `ignore`).
-- `--generatemode combine`: Only injects into existing parameters.
-- `--generatemode root`: Appends new parameters to root path.
-- `--generatemode ignore`: Ignores existing queries and appends new ones.
+## 💡 Usage
 
-- `--valuemode append`: Adds payload to end of existing value.
-- `--valuemode replace`: Replaces the original value.
-
----
-
-## Example Wordlist
-
-```
-param1
-param2
+```bash
+injector -l <urls.txt> [-w <params.txt>] [-p <parameter>] [-vm append|replace] [-gm root|ignore|combine|all] [-c 25] [-s] [-o <output.txt>]
 ```
 
-With `-p nexovir` and chunk = 2, generates:
-
-```
-?param1=nexovir&param2=nexovir
-```
-
----
 
 ## Output
 
