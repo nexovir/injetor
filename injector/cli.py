@@ -3,7 +3,6 @@
 import argparse
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 import pyfiglet
-import pyfiglet
 from colorama import Fore, Style
 
 def show_banner():
@@ -11,7 +10,6 @@ def show_banner():
     twitter = Style.BRIGHT + Fore.CYAN + "X.com: @nexovir" + Style.RESET_ALL
     version = Fore.LIGHTBLACK_EX + "v1.0.0" + Style.RESET_ALL
 
-    # طول ترمینال رو به صورت ثابت در نظر می‌گیریم، مثلاً 80
     total_width = 30
     twitter_centered = twitter.center(total_width)
     version_right = version.rjust(total_width)
