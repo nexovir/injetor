@@ -48,8 +48,6 @@ chunk = args.chunk
 #Notification
 silent = args.silent
 
-print(banner) if not silent else None
-
 
 def read_write_list(list_data: list, file: str, type: str):
 
@@ -155,6 +153,7 @@ def injector (urls : list , generate_mode : str , value_mode : str , parameter :
 
 def main():
     try:
+        print(banner) if not silent else None
         all_parameters = []
         urls = read_write_list("", urls_path, 'r')
         wordlist_parameters = read_write_list("", wordlist, 'r') if wordlist else []
