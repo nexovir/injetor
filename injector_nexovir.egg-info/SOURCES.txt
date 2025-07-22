@@ -1,0 +1,10 @@
+README.md
+setup.py
+injector/__init__.py
+injector/cli.py
+injector_nexovir.egg-info/PKG-INFO
+injector_nexovir.egg-info/SOURCES.txt
+injector_nexovir.egg-info/dependency_links.txt
+injector_nexovir.egg-info/entry_points.txt
+injector_nexovir.egg-info/requires.txt
+injector_nexovir.egg-info/top_level.txt

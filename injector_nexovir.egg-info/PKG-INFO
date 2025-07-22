@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: injector-nexovir
+Version: 1.1.0
+Summary: Smart parameter injection tool
+Author: nexovir
+Requires-Python: >=3.6
+Requires-Dist: colorama
+Requires-Dist: requests
+Requires-Dist: pyfiglet
+Dynamic: author
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary

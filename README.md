@@ -11,9 +11,8 @@
 Clone the repository and install it using `pip`:
 
 ```bash
-git clone https://github.com/nexovir/Injector.git
-cd Injector
-pip install .
+pip install injector_nexovir
+injector -l .....
 ```
 
 Once installed, use `injector` directly from the terminal:
