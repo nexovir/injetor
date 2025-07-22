@@ -20,9 +20,7 @@ parser = argparse.ArgumentParser(description='Injector - Smart parameter injecti
 
 # --- Input Group ---
 input_group = parser.add_argument_group('Input Options')
-exclusive = input_group.add_mutually_exclusive_group(required=True)
-exclusive.add_argument('-l', '--urlspath', help='Path to file containing list of target URLs for Injection.')
-exclusive.add_argument('-u', '--url', help='Single URL or comma-separated URLs to test.')
+input_group.add_argument('-l', '--urlspath', help='Path to file containing list of target URLs for Injection.', required=True)
 input_group.add_argument('-w', '--wordlist',    help='Path to a file containing parameters to fuzz for reflection',required=False)
 input_group.add_argument('-p', '--parameter', help='Comma-separated parameter to test for reflection (default: "nexovir")', default='nexovir', required=False)
 
@@ -168,19 +166,16 @@ def main():
     try:
         show_banner() if not silent else None
         all_parameters = []
-
-        if urls_path:
-            urls = read_write_list("", urls_path, 'r')
-        else:
-            urls = [u.strip() for u in args.url.split(',') if u.strip()]
-
+        urls = read_write_list("", urls_path, 'r')
         wordlist_parameters = read_write_list("", wordlist, 'r') if wordlist else []
         all_urls = injector(urls , generate_mode , value_mode , parameter , wordlist_parameters , chunk)    
-        for url in all_urls:
+        for url in all_urls :
             print(url)
-
+            
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+        print(
+            f"An error occurred: {str(e)}",
+        )
 
 
 if __name__ == "__main__":

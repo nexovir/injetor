@@ -1,0 +1,2 @@
+[console_scripts]
+injector = injector.cli:main
