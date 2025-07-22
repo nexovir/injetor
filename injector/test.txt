@@ -1,0 +1,2 @@
+https://www.loadtest.asda.com/login?request_origin=asda&redirect_uri=https://www.loadtest.asda.com/good-living/tag/slaw
+http://192.168.1.101:8000/admin/private_watchers/subdomainhttpxchanges/?q=asda.com&all=
